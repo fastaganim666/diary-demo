@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+{% block title %}{{ title }} {{ bookmark }}{% endblock %}
+
+{% block categories %}
+<div class="bookmarks-category">Категория:
+    <a href="{% url 'bookmark_main' %}">Все закладки</a> |
+    {% for category in categories %}
+    {% if category.parent_category %}
+    <a href="{{ category.get_absolute_url }}">{{ category.parent_category }} ({{ category.name }})</a> |
+    {% else %}
+    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a> |
+    {% endif %}
+    {% endfor %}
+    <a href="{% url 'category_add' %}"><b>Добавить/удалить категорию</b></a>
+</div>
+{% endblock categories %}
+
+{% block form %}<div class="bookmarks-add">
+<form method="post" action="{% url 'bookmark_main' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить</button>
+</form>
+</div>
+{% endblock form %}
+
+
+{% block content %}
+<div class="bookmarks-title"><h3>{{ active_category }}</h3></div>
+{% for bookmark in bookmarks %}
+<div class="bookmark"><p><a href="{{ bookmark.url }}" target="_blank">{% if bookmark.aliace %} {{ bookmark.aliace | truncatechars:50  }} {% else %}
+    {{ bookmark.url | truncatechars:50  }}{% endif %}</a> - {{ bookmark.description }}</p>
+    <p><a href="{{ bookmark.get_absolute_url }}">Редактировать</a> | <a href="{% url 'bookmark_delete' bookmark.pk %}">Удалить</a></p></div>
+{% endfor %}
+{% endblock content %}

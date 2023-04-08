@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load custom_filters %}
+{% load custom_tags %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+
+{% block form %}
+<div class="bookmarks-category">
+    <a href="{% url 'task_create' %}">Добавить задачу</a>
+</div>
+{% endblock form %}
+
+
+{% block content %}
+ <div class="bookmarks-title">
+     <form action="" method="get">
+       {{ filterset.form.as_p }}
+       <input type="submit" value="Найти" />
+   </form>
+ </div>
+<div class="bookmarks-title"><h3>Мои планы</h3></div>
+
+
+<table style="width: 95%;" border="0">
+<tbody>
+<tr class="planner-table">
+<td style="width: 20%;">Название</td>
+<td style="width: 20%; ">Время</td>
+<td style="width: 20%;">Томаты</td>
+<td style="width: 20%;">Дата</td>
+<td style="width: 20%;">Выполнено</td>
+</tr>
+{% for task in tasks %}
+<tr style="height: 22.3906px;">
+<td style="width: 20%;"><a href="{% url 'task_detail' task.pk %}">{{ task.name }}</a></td>
+<td style="width: 20%;">{% if task.time.all %}{% for time in task.time.all %} {{ time }} <br>{% endfor %}{% else %} - {% endif %}</td>
+<td style="width: 20%;">{% if task.tomatoes_done %}{{ task.tomatoes_done }}{% else %} - {% endif %} <a href="{% url 'add_tomato' task.pk %}">(+)</a>
+    /
+    {% if task.tomatoes %}{{ task.tomatoes }}{% else %} - {% endif %}</td>
+<td style="width: 20%;">{{ task.date }}</td>
+<td style="width: 20%;">{% if task.is_done %} Да {% else %} Нет {% endif %}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+<div class="pagination">
+   {% if page_obj.has_previous %}
+       {# Для каждой ссылки пагинации указываем обработку через новый тег #}
+       <a href="?{% url_replace page=1 %}">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {{ page_obj.number }}
+
+   {% if page_obj.has_next %}
+       <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+</div>
+
+{% endblock content %}

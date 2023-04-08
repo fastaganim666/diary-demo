@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+
+<div class="bookmark"><p><b>{{ purpose.name }}</b> (<a href="{% url 'purpose_edit' purpose.pk %}">редактировать</a>)</p></div>
+
+<div class="bookmarks-add">
+    <p>
+    <b>Главная цель?</b>
+    <br>
+    {% if purpose.main %}
+    Да
+    {% else %}
+    Нет
+    {% endif %}
+    </p>
+    <p>
+        <b>Какие люди помогут в достижении данной цели?</b>
+    <br>
+        {% if purpose.people %} {{ purpose.people }} {% else %} - {% endif %}
+    </p>
+
+    <p>
+        <b>Насклько приоритетна цель?</b>
+    <br>
+        {% if purpose.priority %} {{ purpose.priority }} {% else %} Не указано {% endif %}
+    </p>
+
+    <p>
+        <b>Дедлайн цели?</b>
+    <br>
+    {% if purpose.deadline %}{{ purpose.deadline }} {% else %} Не задано {% endif %}
+    </p>
+
+    <p>
+        <b>Цель достигнута?</b>
+    <br>
+        {% if purpose.achieved %} ДА! {% else %} Пока нет {% endif %}
+    </p>
+    <hr>
+    <p>
+    <b>Какие шаги нужно проделать, чтобы достичь эту цель:</b>
+        <br>
+        {% for step in steps %}
+        {% if step.completed %} <span class="is_done"> {% else %} <span> {% endif %}{{ step.name }}</span> (<a href="{% url 'step_delete' step.id %}">удалить</a> |
+        {% if step.completed %}<a href="{% url 'not_step_done' step.id %}">не выполнено</a>)
+        {% else %}<a href="{% url 'step_done' step.id %}">выполнено</a>){% endif %}
+        <br>
+        {% endfor %}
+        <br>
+        <a href="{% url 'step_add' purpose.id %}">Добавить</a>
+    </p>
+    <p>
+    <hr>
+        <b>Какие ограничения мешают достичь эту цель:</b>
+        <br>
+        {% for constraint in constraints %}
+    {% if constraint.completed %} <span class="is_done"> {% else %} <span> {% endif %}{{ constraint.name }}</span> (<a href="{% url 'constraint_delete' constraint.id %}">удалить</a> |
+        {% if constraint.completed %}<a href="{% url 'not_constraint_done' constraint.id %}">не выполнено</a>)
+        {% else %}<a href="{% url 'constraint_done' constraint.id %}">выполнено</a>){% endif %}
+        <br>
+        {% endfor %}
+        <br>
+        <a href="{% url 'constraint_add' purpose.id %}">Добавить</a>
+        <hr>
+    </p>
+    <p>
+        <b>Какие нужны навыки, чтобы достичь эту цель:</b>
+        <br>
+        {% for skill in skills %}
+        {% if skill.completed %} <span class="is_done"> {% else %} <span> {% endif %}{{ skill.name }}</span> (<a href="{% url 'skill_delete' skill.id %}">удалить</a> |
+        {% if skill.completed %}<a href="{% url 'not_skill_done' skill.id %}">не выполнено</a>)
+        {% else %}<a href="{% url 'skill_done' skill.id %}">выполнено</a>){% endif %}
+        <br>
+        {% endfor %}
+        <br>
+        <a href="{% url 'skill_add' purpose.id %}">Добавить</a>
+        <hr>
+    </p>
+
+    <p>
+        <b>Вопросы, связанные с целью:</b>
+        <br>
+        {% for question in questions %}
+        {{ question.name }} (<a href="{% url 'question_delete' question.id %}">удалить</a> |
+    <a href="{% url 'question_edit' question.id %}">добавить ответ</a>)
+        <br>
+    {% if question.answer %} {{ question.answer }} {% endif %}
+    <br>
+    <br>
+        {% endfor %}
+        <a href="{% url 'question_create' purpose.id %}">Добавить</a>
+        <hr>
+    </p>
+
+    <b>Как происхдит процесс достижения цели? Напишите комментарии:</b>
+    <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Отправить сообщение">
+    </form>
+
+    <p>
+        <b>Комментарии:</b>
+        <br>
+        <br>
+        {% for comment in comments %}
+        {{ comment.text }}
+    <br>
+        {{ comment.add_date }} | <a href="{% url 'comment_delete' comment.id %}">удалить</a>
+        <hr>
+
+        <br>
+        {% endfor %}
+        <br>
+    </p>
+
+</div>
+
+{% endblock content %}

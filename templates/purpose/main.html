@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+
+{% block form %}
+<div class="bookmarks-category">
+    <a href="{% url 'purpose_create' %}">Добавить цель</a>
+</div>
+{% endblock form %}
+
+
+{% block content %}
+<div class="bookmarks-title"><h3>Мои цели</h3></div>
+{% for purpose in purposes %}
+<div class="bookmark"><p><a href="{% url 'purpose_detail' purpose.pk %}">{% if purpose.main %} <b>* {% endif %}{{ purpose.name }}{% if purpose.main %} </b>{% endif %}</a></p><p><a href="{% url 'purpose_delete' purpose.pk %}">Удалить</a></p></div>
+
+
+
+
+
+{% endfor %}
+{% endblock content %}

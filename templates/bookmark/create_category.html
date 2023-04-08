@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Добавить категорию{% endblock %}
+
+
+{% block form %}<div class="bookmarks-add">
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Добавить">
+</form>
+</div>
+{% endblock form %}
+
+
+{% block content %}
+<div class="bookmarks-add">
+    <h3>Список категорий</h3>
+    {% for category in categories %}
+    {% if category.parent_category %}
+    {{ category.parent_category }} ({{ category.name }}) <a href="{% url 'category_delete' category.pk %}">Удалить</a> <br>
+    {% else %}
+    {{ category.name }} <a href="{% url 'category_delete' category.pk %}">Удалить</a><br>
+    {% endif %}
+    {% endfor %}
+    </div>
+{% endblock content %}

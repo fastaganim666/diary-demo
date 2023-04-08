@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+
+<div class="bookmark"><p><b>{{ task.name }}</b> <br>(<a href="{% url 'task_edit' task.pk %}">редактировать</a>)</p></div>
+<div class="bookmarks-add">
+    <b>В какое время выполнять эту задачу:</b>
+    <p>
+    {% for time in times %}
+    {{ time }} | <a href="{% url 'time_delete' time.pk %}">удалить</a><br>
+    {% endfor %}
+        <a href="{% url 'time_add' task.id %}">Добавить</a></p>
+    <p>Томатов выпонено/запланировано:
+    <br>
+        {% if task.tomatoes_done %} {{ task.tomatoes_done }} {% else %} - {% endif %}
+        /
+        {% if task.tomatoes %} {{ task.tomatoes }} {% else %} - {% endif %}
+    </p>
+    <p>Задча выполнена:
+    <br>
+        {% if task.is_done %} Да {% else %} Нет {% endif %}
+    </p>
+</div>
+
+{% endblock content %}

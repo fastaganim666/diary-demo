@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Главная страница - {{ title }}{% endblock %}
+
+
+{% block form %}<div class="bookmarks-add">
+<form method="post">
+    {% csrf_token %}
+    <p>Вы уверены, что хотите удалить закладку <b>"{{ object }}"</b>?</p>
+    {{ form.as_p }}
+    <input type="submit" value="Удалить">
+</form>
+</div>
+{% endblock form %}
+
+
+{% block content %}
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Добавить запись{% endblock %}
+    {% block head %}{{ form.media }}{% endblock %}
+
+
+{% block form %}<div class="bookmarks-add">
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Добавить">
+</form>
+</div>
+{% endblock form %}

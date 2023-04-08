@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Удалить категорию "{{ category }}"{% endblock %}
+
+
+{% block form %}<div class="bookmarks-add">
+    <a href="{% url 'category_add' %}">Назад</a>
+<form method="post">
+    {% csrf_token %}
+    <p>Вы уверены что хотите удалить категорию "{{ object }}"?</p>
+    {{ form.as_p }}
+    <input type="submit" value="Да">
+</form>
+</div>
+{% endblock form %}
+
+
+{% block content %}
+{% endblock content %}
